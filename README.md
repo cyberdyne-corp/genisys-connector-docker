@@ -15,5 +15,9 @@ $ pip install bottle
 Run it:
 
 ````
-$ python genisys-connector-docker.py
+$ python genisysconnector.py
 ````
+
+## Query
+
+The component exposes a `/resources` endpoint to manage Docker containers.
