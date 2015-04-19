@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from bottle import route, run
+from bottle import get, run
 from dockermanager import DockerManager
 
 
-@route('/resources', method='GET')
+@get('/resources')
 def list():
     containers = docker.list_containers()
     return containers
 
-docker = DockerManager('unix://var/run/docker.sock')
-run(host='localhost', port=8080)
+if __name__ == '__main__':
+    docker = DockerManager('unix://var/run/docker.sock')
+    run(host='localhost', port=8080)
