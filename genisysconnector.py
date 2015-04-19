@@ -8,7 +8,7 @@ from dockermanager import DockerManager
 @route('/resources', method='GET')
 def list():
     containers = docker.list_containers()
-    print("Containers: %s" % containers)
+    return containers
 
 docker = DockerManager('unix://var/run/docker.sock')
 run(host='localhost', port=8080)

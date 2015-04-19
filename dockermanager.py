@@ -1,4 +1,5 @@
 from docker import Client
+import json
 
 
 class DockerManager:
@@ -7,4 +8,5 @@ class DockerManager:
         self.client = Client(docker_url)
 
     def list_containers(self):
-        return self.client.containers()
+        containers = self.client.containers()
+        return json.dumps(containers)
