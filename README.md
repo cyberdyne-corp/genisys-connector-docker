@@ -7,7 +7,7 @@ Allows the genisys component to communicate with Docker.
 Install bottle (assuming you got a Python >= 3.4 devel environment ready):
 
 ````
-$ pip install bottle
+$ pip install bottle docker-py
 ````
 
 ## Run
