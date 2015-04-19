@@ -21,3 +21,9 @@ $ python genisysconnector.py
 ## Query
 
 The component exposes a `/resources` endpoint to manage Docker containers.
+
+Query the running containers:
+
+````
+$ curl http://localhost:8080/resources
+````
