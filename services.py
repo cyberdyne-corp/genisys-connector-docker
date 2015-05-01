@@ -1,6 +1,6 @@
 myService = {
-    "image": "docker-image-name",
-    "command": "jar -jar myjar.jar",
+    "image": "backend",
+    "command": "java -jar /tmp/backend.jar",
     # Optional attributes
     "tag": "myTag"
 }

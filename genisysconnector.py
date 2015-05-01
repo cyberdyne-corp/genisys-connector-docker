@@ -7,7 +7,12 @@ from dockermanager import DockerManager
 
 @post('/service/<service_name>/create')
 def create_service(service_name):
-    print("hello %s" % service_name)
+    try:
+        service_definition = services[service_name]
+        print ("Service definition found: %s" % service_definition)
+        docker.create_service_container(service_definition)
+    except KeyError:
+        print ("Service definition not found for service %s" % service_name)
 
 if __name__ == '__main__':
     services = {}
