@@ -11,5 +11,7 @@ def list():
     return containers
 
 if __name__ == '__main__':
+    config = {}
+    execfile("services.py", config)
     docker = DockerManager('unix://var/run/docker.sock')
     run(host='localhost', port=8080)
