@@ -1,17 +1,18 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from bottle import get, run
+from bottle import post, run
 from dockermanager import DockerManager
 
 
-@get('/resources')
-def list():
-    containers = docker.list_containers()
-    return containers
+@post('/service/<service_name>/create')
+def create_service(service_name):
+    print("hello %s" % service_name)
 
 if __name__ == '__main__':
-    config = {}
-    execfile("services.py", config)
+    services = {}
+    exec(compile(open("services.py", "rb").read(), "services.py", 'exec'),
+         {},
+         services)
     docker = DockerManager('unix://var/run/docker.sock')
     run(host='localhost', port=8080)
