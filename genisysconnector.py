@@ -3,6 +3,7 @@
 
 from bottle import post, run
 from dockermanager import DockerManager
+import errno
 
 
 @post('/service/<service_name>/create')
@@ -14,10 +15,25 @@ def create_service(service_name):
     except KeyError:
         print ("Service definition not found for service %s" % service_name)
 
-if __name__ == '__main__':
+
+def load_services_from_file(filename):
     services = {}
-    exec(compile(open("services.py", "rb").read(), "services.py", 'exec'),
-         {},
-         services)
+    try:
+        exec(compile(open(filename, "rb").read(), filename, 'exec'),
+             {},
+             services)
+    except OSError as e:
+        if e.errno == errno.ENOENT:
+            print("Missing services definitions file. Aborting.")
+            raise
+        else:
+            print("An error occured while trying to read \
+                services definitions. Aborting.")
+            raise
+    return services
+
+
+if __name__ == '__main__':
+    services = load_services_from_file("services.py")
     docker = DockerManager('unix://var/run/docker.sock')
     run(host='localhost', port=8080)
