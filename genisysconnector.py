@@ -1,31 +1,71 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from bottle import post, run, abort
+from bottle import post, get, put, run, abort, request
 from dockermanager import DockerManager
 import errno
 
 
-@post('/service/<service_name>/start')
+@post('/service')
+def create_service_definition():
+    data = request.json
+    if not data:
+        abort(400, 'No data received')
+    try:
+        service_name = data["name"]
+        services[service_name] = {}
+        services[service_name]["name"] = service_name
+        services[service_name]["image"] = data["image"]
+    except KeyError:
+        abort(400, 'Missing parameters.')
+    try:
+        services[service_name]["command"] = data["command"]
+    except KeyError:
+        pass
+
+
+@put('/service/<service_name>')
+def update_service_definition(service_name):
+    data = request.json
+    if not data:
+        abort(400, 'No data received')
+    try:
+        services[service_name] = {}
+        services[service_name]["name"] = service_name
+        services[service_name]["image"] = data["image"]
+    except KeyError:
+        abort(400, 'Missing parameter.')
+    try:
+        services[service_name]["command"] = data["command"]
+    except KeyError:
+        pass
+
+
+@get('/service/<service_name>')
+def retrieve_service_definition(service_name):
+    try:
+        service_definition = services[service_name]
+        return service_definition
+    except KeyError:
+        abort(501, "Undefined service: %s." % service_name)
+
+
+@get('/service/<service_name>/start')
 def create_service(service_name):
     try:
         service_definition = services[service_name]
-        print("Service definition found: %s" % service_definition)
         docker.create_service_container(service_definition)
     except KeyError:
-        print("Service definition not found for service %s" % service_name)
-        abort(501, "Undefined service.")
+        abort(501, "Undefined service: %s." % service_name)
 
 
-@post('/service/<service_name>/kill')
+@get('/service/<service_name>/kill')
 def stop_service(service_name):
     try:
         service_definition = services[service_name]
-        print("Service definition found: %s" % service_definition)
         docker.stop_service_container(service_definition)
     except KeyError:
-        print("Service definition not found for service %s" % service_name)
-        abort(501, "Undefined service.")
+        abort(501, "Undefined service: %s." % service_name)
 
 
 def load_services_from_file(filename):
@@ -36,11 +76,10 @@ def load_services_from_file(filename):
              services)
     except OSError as e:
         if e.errno == errno.ENOENT:
-            print("Missing services definitions file. Aborting.")
-            raise
+            print("No services definitions file provided.")
         else:
             print("An error occured while trying to read \
-                services definitions. Aborting.")
+                services definitions file. Aborting.")
             raise
     return services
 
@@ -48,4 +87,4 @@ def load_services_from_file(filename):
 if __name__ == '__main__':
     services = load_services_from_file("services.py")
     docker = DockerManager('unix://var/run/docker.sock')
-    run(host='localhost', port=8080)
+    run(host='localhost', port=7051)

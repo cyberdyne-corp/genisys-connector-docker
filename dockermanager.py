@@ -7,9 +7,13 @@ class DockerManager:
         self.client = Client(docker_url)
 
     def create_service_container(self, service_definition):
+        try:
+            command = service_definition["command"]
+        except KeyError:
+            command = None
         container = self.client.create_container(
             image=service_definition["image"],
-            command=service_definition["command"])
+            command=command)
         self.client.start(container.get('Id'))
 
     def stop_service_container(self, service_definition):
