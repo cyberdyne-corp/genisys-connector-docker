@@ -73,7 +73,7 @@ It expects a JSON request body to be POST. The request body must look like:
 
 The *name* and *image* fields are mandatory.
 
-The *service* field is used to identify the service.
+The *name* field is used to identify the service.
 
 The *image* field specifies the image to use when starting/killing containers. The image tag must be included.
 
