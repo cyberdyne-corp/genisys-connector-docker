@@ -1,19 +1,31 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from bottle import post, run
+from bottle import post, run, abort
 from dockermanager import DockerManager
 import errno
 
 
-@post('/service/<service_name>/create')
+@post('/service/<service_name>/start')
 def create_service(service_name):
     try:
         service_definition = services[service_name]
-        print ("Service definition found: %s" % service_definition)
+        print("Service definition found: %s" % service_definition)
         docker.create_service_container(service_definition)
     except KeyError:
-        print ("Service definition not found for service %s" % service_name)
+        print("Service definition not found for service %s" % service_name)
+        abort(501, "Undefined service.")
+
+
+@post('/service/<service_name>/kill')
+def stop_service(service_name):
+    try:
+        service_definition = services[service_name]
+        print("Service definition found: %s" % service_definition)
+        docker.stop_service_container(service_definition)
+    except KeyError:
+        print("Service definition not found for service %s" % service_name)
+        abort(501, "Undefined service.")
 
 
 def load_services_from_file(filename):
