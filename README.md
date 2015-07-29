@@ -52,14 +52,13 @@ Note: The examples use the httpie CLI to query the API, see: https://github.com/
 
 The following endpoints are exposed:
 
-* [/service](#service-1) : Register a new service defintion
+* [/service](#service-1) : List service definitions or register a new service definition
 * [/service/\<service_name\>](#serviceservice_name) : Retrieve or update a service definition
-* [/service/\<service_name\>/scale](#serviceservice_namescale) : Start a new container for a service
-* [/service/\<service_name\>/kill](#serviceservice_namekill) : Kill a container associated to a service
+* [/service/\<service_name\>/scale](#serviceservice_namescale) : Ensure a number of containers are running for a service
 
 #### /service
 
-This endpoint is used to create a new service definition.
+This endpoint is used to list service definitions or to create a new service definition.
 
 It supports the following methods: POST and GET.
 
@@ -93,7 +92,7 @@ The *name* and *image* fields are mandatory.
 
 The *name* field is used to identify the service.
 
-The *image* field specifies the image to use when starting/killing containers. The image tag must be included.
+The *image* field specifies the reference of the container image used when creating/stopping containers. The image tag must be included.
 
 The *command* field specifies which command should be used when starting a container.
 
