@@ -2,7 +2,7 @@
 
 Allows the genisys component to communicate with Docker.
 
-Can manage services as containers. 
+Can manage services as containers.
 
 ## Setup
 
@@ -40,7 +40,7 @@ A service definition must include a *name* and an *image*, it may optionally pro
 The *image* field is used to start a container, if the *command* field has been specified the container will be started using that command.
 The *image* field is also used when killing a container, the adapter will search for every running container using this image and will kill one.
 
-You can specify an optional file called *services.py* at the root of the project and use it to define services using the format defined above. 
+You can specify an optional file called *services.py* at the root of the project and use it to define services using the format defined above.
 
 ## HTTP API
 
@@ -54,7 +54,7 @@ The following endpoints are exposed:
 
 * [/service](#service-1) : Register a new service defintion
 * [/service/\<service_name\>](#serviceservice_name) : Retrieve or update a service definition
-* [/service/\<service_name\>/start](#serviceservice_namestart) : Start a new container for a service
+* [/service/\<service_name\>/scale](#serviceservice_namescale) : Start a new container for a service
 * [/service/\<service_name\>/kill](#serviceservice_namekill) : Kill a container associated to a service
 
 #### /service
@@ -95,7 +95,7 @@ When hitting the endpoint with a GET, it returns a JSON body like this:
 
 ````
 {
-    "image": "tutum/hello-world:latest", 
+    "image": "tutum/hello-world:latest",
     "name": "helloworld"
 }
 ````
@@ -121,26 +121,22 @@ Example:
 $ http PUT :7051/service/helloworld image="panamax/hello-world-php:latest" command="/run.sh"
 ````
 
-#### /service/\<service_name\>/start
+#### /service/\<service_name\>/scale
 
-This endpoint is hit with a GET and is used to start a container associated to a service.
+This endpoint is used to ensure that a specific number of containers associated to a service are running.
 
-The return code is 200 on success.
+It expects a JSON request body to be POST. The request body must look like:
+
+````
+{
+	"number": number_of_containers,
+}
+````
+
+The *number* field is mandatory.
 
 Example:
 
 ````
-$ http :7051/service/helloworld/start
-````
-
-#### /service/\<service_name\>/kill
-
-This endpoint is hit with a GET and is used to kill a running container associated to a service.
-
-The return code is 200 on success.
-
-Example:
-
-````
-$ http :7051/service/helloworld/kill
+$ http POST :7051/service/helloworld/scale number=3
 ````
