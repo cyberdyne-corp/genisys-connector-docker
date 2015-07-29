@@ -50,20 +50,20 @@ def retrieve_service_definition(service_name):
         abort(501, "Undefined service: %s." % service_name)
 
 
-@get('/service/<service_name>/start')
-def create_service(service_name):
+@post('/service/<service_name>/scale')
+def scale_service(service_name):
+    data = request.json
+    if not data:
+        abort(400, 'No data received')
     try:
-        service_definition = services[service_name]
-        docker.create_service_container(service_definition)
+        scale_number = int(data["number"])
     except KeyError:
-        abort(501, "Undefined service: %s." % service_name)
-
-
-@get('/service/<service_name>/kill')
-def stop_service(service_name):
+        abort(400, 'Missing parameter.')
+    except ValueError:
+        abort(400, 'Invalid value for number parameter.')
     try:
         service_definition = services[service_name]
-        docker.stop_service_container(service_definition)
+        docker.ensure_containers_for_service(service_definition, scale_number)
     except KeyError:
         abort(501, "Undefined service: %s." % service_name)
 
