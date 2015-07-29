@@ -61,7 +61,25 @@ The following endpoints are exposed:
 
 This endpoint is used to create a new service definition.
 
-It expects a JSON request body to be POST. The request body must look like:
+It supports the following methods: POST and GET.
+
+When hitting the endpoint with a GET, it returns a JSON body like this:
+
+````
+{
+	myServiceA = {
+		"name": "myServiceA"
+		"image": "docker_image:tag",
+	  "command": "command",
+	},
+	myServiceB = {
+		"name": "myServiceB"
+		"image": "docker_image:tag",
+	}
+}
+````
+
+When hitting the endpoint with a POST, it expects a JSON request body that must look like:
 
 ````
 {
