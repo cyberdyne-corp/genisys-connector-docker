@@ -2,8 +2,13 @@
 # -*- coding: utf-8 -*-
 
 from bottle import post, get, put, run, abort, request
+from utils import load_services_from_file
 from dockermanager import DockerManager
-import errno
+
+
+@get('/service')
+def retrieve_service_definitions():
+    return services
 
 
 @post('/service')
@@ -24,9 +29,13 @@ def create_service_definition():
         pass
 
 
-@get('/service')
-def retrieve_service_definitions():
-    return services
+@get('/service/<service_name>')
+def retrieve_service_definition(service_name):
+    try:
+        service_definition = services[service_name]
+        return service_definition
+    except KeyError:
+        abort(501, "Undefined service: %s." % service_name)
 
 
 @put('/service/<service_name>')
@@ -46,15 +55,6 @@ def update_service_definition(service_name):
         pass
 
 
-@get('/service/<service_name>')
-def retrieve_service_definition(service_name):
-    try:
-        service_definition = services[service_name]
-        return service_definition
-    except KeyError:
-        abort(501, "Undefined service: %s." % service_name)
-
-
 @post('/service/<service_name>/scale')
 def scale_service(service_name):
     data = request.json
@@ -71,22 +71,6 @@ def scale_service(service_name):
         docker.ensure_containers_for_service(service_definition, scale_number)
     except KeyError:
         abort(501, "Undefined service: %s." % service_name)
-
-
-def load_services_from_file(filename):
-    services = {}
-    try:
-        exec(compile(open(filename, "rb").read(), filename, 'exec'),
-             {},
-             services)
-    except OSError as e:
-        if e.errno == errno.ENOENT:
-            print("No services definitions file provided.")
-        else:
-            print("An error occured while trying to read \
-                services definitions file. Aborting.")
-            raise
-    return services
 
 
 if __name__ == '__main__':
