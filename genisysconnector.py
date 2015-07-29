@@ -24,6 +24,11 @@ def create_service_definition():
         pass
 
 
+@get('/service')
+def retrieve_service_definitions():
+    return services
+
+
 @put('/service/<service_name>')
 def update_service_definition(service_name):
     data = request.json
