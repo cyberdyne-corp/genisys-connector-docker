@@ -1,4 +1,4 @@
-from docker import Client
+from docker import Client, utils
 
 
 class DockerManager:
@@ -22,9 +22,20 @@ class DockerManager:
                 break
 
     def create_container(self, container_image, container_command):
+        env = {
+            "SERVICE_NAME": "myService",
+            "SERVICE_TAGS": "myTag",
+            "SERVICE_8080_CHECK_CMD": "/tmp/health-check.sh",
+            "SERVICE_8080_CHECK_INTERVAL": "15s"
+        }
         container = self.client.create_container(
             image=container_image,
-            command=container_command)
+            command=container_command,
+            ports=['8080'],
+            environment=env,
+            host_config=utils.create_host_config(port_bindings={
+                8080: None
+            }))
         self.client.start(container.get('Id'))
 
     def ensure_containers_for_service(self,
