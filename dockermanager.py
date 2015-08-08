@@ -21,21 +21,13 @@ class DockerManager:
                 self.client.kill(container["Id"])
                 break
 
-    def create_container(self, container_image, container_command):
-        env = {
-            "SERVICE_NAME": "myService",
-            "SERVICE_TAGS": "myTag",
-            "SERVICE_8080_CHECK_CMD": "/tmp/health-check.sh",
-            "SERVICE_8080_CHECK_INTERVAL": "15s"
-        }
+    def create_container(self, service_definition):
         container = self.client.create_container(
-            image=container_image,
-            command=container_command,
-            ports=['8080'],
-            environment=env,
-            host_config=utils.create_host_config(port_bindings={
-                8080: None
-            }))
+            image=service_definition["image"],
+            command=service_definition["command"],
+            ports=service_definition["ports"],
+            environment=service_definition["environment"],
+            host_config=utils.create_host_config(publish_all_ports=True))
         self.client.start(container.get('Id'))
 
     def ensure_containers_for_service(self,
@@ -48,9 +40,5 @@ class DockerManager:
                 self.stop_container_by_image(service_definition["image"])
                 service_container_count -= 1
             elif service_container_count < container_number:
-                try:
-                    command = service_definition["command"]
-                except KeyError:
-                    command = None
-                self.create_container(service_definition["image"], command)
+                self.create_container(service_definition)
                 service_container_count += 1

@@ -23,10 +23,9 @@ def create_service_definition():
         services[service_name]["image"] = data["image"]
     except KeyError:
         abort(400, 'Missing parameters.')
-    try:
-        services[service_name]["command"] = data["command"]
-    except KeyError:
-        pass
+    services[service_name]["command"] = data.get("command", None)
+    services[service_name]["environment"] = data.get("environment", None)
+    services[service_name]["ports"] = data.get("ports", None)
 
 
 @get('/service/<service_name>')
@@ -49,10 +48,9 @@ def update_service_definition(service_name):
         services[service_name]["image"] = data["image"]
     except KeyError:
         abort(400, 'Missing parameter.')
-    try:
-        services[service_name]["command"] = data["command"]
-    except KeyError:
-        pass
+    services[service_name]["command"] = data.get("command", None)
+    services[service_name]["environment"] = data.get("environment", None)
+    services[service_name]["ports"] = data.get("ports", None)
 
 
 @post('/service/<service_name>/scale')
