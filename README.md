@@ -31,14 +31,23 @@ A service definition looks like:
 myService = {
 	"name": "myService"
 	"image": "docker_image:tag",
-    "command": "command",
+  "command": "command",
+	"environment": {
+		"ENV_VARIABLE_A": "value",
+		"ENV_VARIABLE_B": "value",
+	},
+	"ports": ['8080']
 }
 ````
 
-A service definition must include a *name* and an *image*, it may optionally provide a *command*.
+A service definition must include a *name* and an *image*, it may optionally provide a *command*, an *environment* hash and an array of *ports*.
 
 The *image* field is used to start a container, if the *command* field has been specified the container will be started using that command.
-The *image* field is also used when killing a container, the adapter will search for every running container using this image and will kill one.
+The *image* field is also used when stopping containers, the image is used as reference to search in running containers.
+
+The *environment* field is used to inject environment variables into the containers associated with the service.
+
+The *ports* field is used to expose a list of ports on the Docker host.
 
 You can specify an optional file called *services.py* at the root of the project and use it to define services using the format defined above.
 
@@ -70,10 +79,18 @@ When hitting the endpoint with a GET, it returns a JSON body like this:
 		"name": "myServiceA"
 		"image": "docker_image:tag",
 	  "command": "command",
+		"environment": {
+			"ENV_VARIABLE_A": "value",
+			"ENV_VARIABLE_B": "value",
+		},
+		"ports": ['8080']
 	},
 	myServiceB = {
 		"name": "myServiceB"
 		"image": "docker_image:tag",
+		"ports": ['5000', '5001'],
+		"command": null,
+		"environment": null,
 	}
 }
 ````
@@ -84,7 +101,13 @@ When hitting the endpoint with a POST, it expects a JSON request body that must 
 {
 	"name": "service_name",
 	"image": "docker_image:tag",
-	"command": "command"
+	"command": "command",
+	"environment": {
+			"ENV_VARIABLE_A": "value",
+			"ENV_VARIABLE_B": "value",
+		},
+		"ports": ['port_number']
+	}
 }
 ````
 
@@ -96,10 +119,14 @@ The *image* field specifies the reference of the container image used when creat
 
 The *command* field specifies which command should be used when starting a container.
 
+The *environment* field is used to inject environment variables into the containers associated with the service.
+
+The *ports* field is used to expose a list of ports on the Docker host.
+
 Example:
 
 ````
-$ http POST :7051/service name="helloworld" image="tutum/hello-world:latest"
+$ http POST :7051/service name="helloworld" image="tutum/hello-world:latest" ports:='["8080", "8081"]' environment:='{"VAR_A":"value", "VAR_B": "value"}'
 ````
 
 #### /service/\<service_name\>
@@ -114,6 +141,9 @@ When hitting the endpoint with a GET, it returns a JSON body like this:
 {
     "image": "tutum/hello-world:latest",
     "name": "helloworld"
+		"command": null,
+		"environment": null,
+		"ports": null,
 }
 ````
 
@@ -121,8 +151,12 @@ When hitting the endpoint with a PUT, it expects a JSON request body that must l
 
 ````
 {
-	"image": "panamax/hello-world-php:latest",
-	"command": "/run.sh"
+	"image": "tutum/hello-world:latest",
+	"command": "/run.sh",
+	"environment": {
+		"VAR_A": "value"
+	},
+	"ports": ['8080'],
 }
 ````
 
@@ -132,10 +166,14 @@ The *image* field specifies the image to use when starting/killing containers. T
 
 The *command* field specifies which command should be used when starting a container.
 
+The *environment* field is used to inject environment variables into the containers associated with the service.
+
+The *ports* field is used to expose a list of ports on the Docker host.
+
 Example:
 
 ````
-$ http PUT :7051/service/helloworld image="panamax/hello-world-php:latest" command="/run.sh"
+$ http PUT :7051/service/helloworld image="panamax/hello-world-php:latest" command="/run.sh" ports:='["8080", "8082"]' environment:='{"VAR_A":"value", "VAR_B": "value"}'
 ````
 
 #### /service/\<service_name\>/scale

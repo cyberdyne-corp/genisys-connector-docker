@@ -22,14 +22,9 @@ class DockerManager:
                 break
 
     def create_container(self, service_definition):
-        try:
-            command = service_definition["command"]
-        except KeyError:
-            command = None
-
         container = self.client.create_container(
             image=service_definition["image"],
-            command=command,
+            command=service_definition["command"],
             ports=service_definition["ports"],
             environment=service_definition["environment"],
             host_config=utils.create_host_config(publish_all_ports=True))
