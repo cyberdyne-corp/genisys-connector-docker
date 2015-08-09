@@ -64,6 +64,7 @@ The following endpoints are exposed:
 * [/service](#service-1) : List service definitions or register a new service definition
 * [/service/\<service_name\>](#serviceservice_name) : Retrieve or update a service definition
 * [/service/\<service_name\>/scale](#serviceservice_namescale) : Ensure a number of containers are running for a service
+* [/service/\<service_name\>/status](#serviceservice_namestatus) : Return the number of running resources for a service
 
 #### /service
 
@@ -194,4 +195,16 @@ Example:
 
 ````
 $ http POST :7051/service/helloworld/scale number=3
+````
+
+#### /service/\<service_name\>/status
+
+This endpoint returns the number of running resources for a service managed by this connector.
+
+When hitting the endpoint with a GET, it returns a JSON body like this:
+
+````
+{
+	"running_resources": number_of_running_resources,
+}
 ````
