@@ -71,6 +71,18 @@ def scale_service(service_name):
         abort(501, "Undefined service: %s." % service_name)
 
 
+@get('/service/<service_name>/status')
+def service_status(service_name):
+    try:
+        service_definition = services[service_name]
+        running_resources = docker.count_containers_by_image(service_definition["image"])
+        response = {}
+        response["running_resources"] = running_resources
+        return response
+    except KeyError:
+        abort(501, "Undefined service: %s." % service_name)
+
+
 if __name__ == '__main__':
     services = load_services_from_file("services.py")
     docker = DockerManager('unix://var/run/docker.sock')
