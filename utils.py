@@ -1,4 +1,5 @@
 import errno
+from yaml import safe_load
 
 
 def load_services_from_file(filename):
@@ -15,3 +16,9 @@ def load_services_from_file(filename):
                 services definitions file. Aborting.")
             raise
     return services
+
+
+def load_configuration(configuration_file):
+    with open(configuration_file, 'r') as stream:
+        config = safe_load(stream)
+        return config
