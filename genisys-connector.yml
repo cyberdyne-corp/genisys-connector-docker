@@ -3,7 +3,7 @@ connector:
   bind: 127.0.0.1
 
   # Application port
-  port: 7001
+  port: 7051
 
   # Path to compute definitions
   service_file: ./services.py
