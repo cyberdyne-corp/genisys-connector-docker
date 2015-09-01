@@ -11,6 +11,6 @@ RUN apk add --update \
 WORKDIR /app
 
 COPY . /app
-RUN virtualenv /env && /env/bin/pip install -r /app/requirements.txt
+RUN virtualenv -p /usr/bin/python3 /env && /env/bin/pip install -r /app/requirements.txt
 
-CMD ["/env/bin/python", "genisysconnector.py"]
+CMD ["/env/bin/python3", "genisysconnector.py"]
