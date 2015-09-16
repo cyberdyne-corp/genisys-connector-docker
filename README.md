@@ -53,7 +53,7 @@ You can specify an optional file called *services.py* at the root of the project
 
 ## HTTP API
 
-The adapter exposes a HTTP API. It can be used to perform CRUD actions on services and also to trigger remote procedure calls to manage containers.
+The connector exposes a HTTP API. It can be used to perform CRUD actions on services and also to trigger remote procedure calls to manage containers.
 
 Note: The examples use the httpie CLI to query the API, see: https://github.com/jakubroztocil/httpie
 
