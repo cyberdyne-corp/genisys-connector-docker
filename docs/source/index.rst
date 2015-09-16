@@ -111,8 +111,8 @@ The following endpoints are exposed:
 
 .. _service-endpoint:
 
-/service
-^^^^^^^^
+``/service``
+^^^^^^^^^^^^
 
 This endpoint is used to list service definitions or to create a new service definition.
 
@@ -177,8 +177,8 @@ Example:
 
 .. _service-name-endpoint:
 
-/service/<service_name>
-^^^^^^^^^^^^^^^^^^^^^^^
+``/service/<service_name>``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This endpoint is used to retrieve a service definition or to update it.
 
@@ -227,8 +227,8 @@ Example:
 
 .. _service-scale-endpoint:
 
-/service/<service_name>/scale
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``/service/<service_name>/scale``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This endpoint is used to ensure that a specific number of containers associated to a service are running.
 
@@ -253,8 +253,8 @@ Example:
 
 .. _service-status-endpoint:
 
-/service/<service_name>/status
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``/service/<service_name>/status``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This endpoint returns the number of running resources for a service managed by this connector.
 
