@@ -2,11 +2,11 @@ Genisys connector for Docker
 ============================
 
 .. image:: https://readthedocs.org/projects/genisys-connector-docker/badge/?version=latest
-:target: http://genisys-connector-docker.readthedocs.org/en/latest/?badge=latest
-:alt: Documentation Status
+   :target: http://genisys-connector-docker.readthedocs.org/en/latest/?badge=latest
+   :alt: Documentation Status
 .. image:: https://badge.imagelayers.io/cyberdynesystems/genisys-connector-docker:latest.svg
-:target: https://imagelayers.io/?images=cyberdynesystems/genisys-connector-docker:latest
-:alt: imagelayers.io
+   :target: https://imagelayers.io/?images=cyberdynesystems/genisys-connector-docker:latest
+   :alt: imagelayers.io
 
 This component allows `Genisys`_ to communicate with a Docker engine.
 
