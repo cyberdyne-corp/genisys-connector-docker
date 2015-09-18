@@ -4,8 +4,8 @@ Genisys connector for Docker
 .. image:: https://badge.imagelayers.io/cyberdynesystems/genisys-connector-docker:latest.svg
    :target: https://imagelayers.io/?images=cyberdynesystems/genisys-connector-docker:latest
    :alt: imagelayers.io
-.. image:: https://readthedocs.org/projects/genisys-connector-docker/badge/?version=latest
-   :target: http://genisys-connector-docker.readthedocs.org/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/genisys-connector-docker/badge/?version=stable
+   :target: http://genisys-connector-docker.readthedocs.org/en/latest/?badge=stable
    :alt: Documentation Status
 
 
